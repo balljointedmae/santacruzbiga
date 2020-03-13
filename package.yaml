@@ -13,11 +13,12 @@ extra-source-files:
 
 dependencies:
   - base >= 4.7 && < 5
-  - Spock
-  - Spock-core
+  - servant
+  - servant-server
+  - aeson
+  - wai
+  - warp
   - relude
-  - text
-  - mtl
 
 default-extensions:
   - NoImplicitPrelude

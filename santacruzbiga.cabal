@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b856f72653c3d7bb09c819e8456f5c2f57e376ae9b4010f7868ec0fa464bee6d
+-- hash: fe11b8c6e81d3c2e77fac53c5ca74ac3261b09e1028e086b316efd4f10229b8c
 
 name:           santacruzbiga
 version:        0.1.0.0
@@ -22,15 +22,17 @@ extra-source-files:
 executable santacruzbiga
   main-is: Main.hs
   other-modules:
+      Lib
       Paths_santacruzbiga
   hs-source-dirs:
       src
   default-extensions: NoImplicitPrelude OverloadedStrings
   build-depends:
-      Spock
-    , Spock-core
+      aeson
     , base >=4.7 && <5
-    , mtl
     , relude
-    , text
+    , servant
+    , servant-server
+    , wai
+    , warp
   default-language: Haskell2010
