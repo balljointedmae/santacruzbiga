@@ -1,42 +1,48 @@
-use std::collections::HashMap;
+#[macro_use]
+extern crate juniper;
+use diesel::*;
+use diesel::r2d2::*;
+extern crate serde_json;
+use uuid::Uuid;
 
-use actix_web::{error, middleware, web, App, Error, HttpResponse, HttpServer};
-use tera::Tera;
+use actix_web::{middleware, web, App, HttpServer};
 
-// store tera template in application state
-async fn index(
-    tmpl: web::Data<tera::Tera>,
-    query: web::Query<HashMap<String, String>>,
-) -> Result<HttpResponse, Error> {
-    let s = if let Some(name) = query.get("name") {
-        // submitted form
-        let mut ctx = tera::Context::new();
-        ctx.insert("name", &name.to_owned());
-        ctx.insert("text", &"Welcome!".to_owned());
-        tmpl.render("user.html", &ctx)
-            .map_err(|_| error::ErrorInternalServerError("Template error"))?
-    } else {
-        tmpl.render("index.html", &tera::Context::new())
-            .map_err(|_| error::ErrorInternalServerError("Template error"))?
-    };
-    Ok(HttpResponse::Ok().content_type("text/html").body(s))
-}
+type DbPool = r2d2::Pool<ConnectionManager<PgConnection>>;
+
+mod db;
+mod handlers;
+mod schemas;
+
+use crate::handlers::register;
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
-    std::env::set_var("RUST_LOG", "actix_web=info");
+    std::env::set_var("RUST_LOG", "actix_web=info,diesel=debug");
     env_logger::init();
+    dotenv::dotenv().ok();
 
-    HttpServer::new(|| {
-        let tera =
-            Tera::new(concat!(env!("CARGO_MANIFEST_DIR"), "/templates/**/*")).unwrap();
+    // set up database connection pool
+    let connspec = std::env::var("DATABASE_URL").expect("DATABASE_URL");
+    let manager = ConnectionManager::<PgConnection>::new(connspec);
+    let pool = r2d2::Pool::builder()
+        .build(manager)
+        .expect("Failed to create pool.");
 
+    let bind = "127.0.0.1:8080";
+
+    println!("Starting server at: {}", &bind);
+
+    // Start HTTP server
+    HttpServer::new(move || {
         App::new()
-            .data(tera)
-            .wrap(middleware::Logger::default()) // enable logger
-            .service(web::resource("/").route(web::get().to(index)))
+            // set up DB pool to be used with web::Data<Pool> extractor
+            .data(pool.clone())
+            .configure(register)
+            .wrap(middleware::Logger::default())
+            .service(get_user)
+            .service(add_user)
     })
-    .bind("127.0.0.1:8080")?
+    .bind(&bind)?
     .run()
     .await
 }

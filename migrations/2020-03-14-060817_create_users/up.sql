@@ -1,0 +1,13 @@
+CREATE TABLE posts (
+  id SERIAL PRIMARY KEY,
+  authorid SERIAL PRIMARY KEY,
+  title VARCHAR NOT NULL,
+  body TEXT NOT NULL,
+  published BOOLEAN NOT NULL DEFAULT 'f'
+)
+
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  fullname VARCHAR NOT NULL,
+  email VARCHAR NOT NULL
+)
