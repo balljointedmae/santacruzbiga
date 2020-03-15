@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"santacruzbiga"
+	"./santacruzbiga"
 
 	"github.com/gin-gonic/gin"
 	graphql "github.com/graph-gophers/graphql-go"
