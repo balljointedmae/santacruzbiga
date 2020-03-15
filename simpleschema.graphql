@@ -1,0 +1,35 @@
+type Article{
+	id: ID!
+	text: String!
+	title: String!
+	author: User!
+}
+
+type User{
+	id: ID!
+	name: String!
+	email: String!
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

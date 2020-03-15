@@ -2,7 +2,7 @@
   <p>{{ greeting }} World!</p>
 </template>
 
-<script>
+<script lang="typescript">
 module.exports = {
   data: function() {
     return {

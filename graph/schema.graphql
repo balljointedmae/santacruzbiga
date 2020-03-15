@@ -1,0 +1,44 @@
+type Article{
+	id: ID!
+	text: String!
+	title: String!
+	author: User!
+}
+
+type User{
+	id: ID!
+	name: String!
+	email: String!
+}
+
+type Query{
+	articles: [Article!]!
+}
+
+input NewUser{
+	id: ID
+	name: String!
+	email: String!
+}
+
+input NewArticle{
+	id: ID
+	text: String!
+	author: NewUser!
+	title: String!
+}
+
+type PageInfo {
+	startCursor: ID
+	endCursor: ID
+	hasNextPage: Boolean!
+}
+
+type Mutation{
+	createArticle(
+		input: NewArticle!
+	): Article!
+	createUser(
+		input: NewUser!
+	): Article!
+}

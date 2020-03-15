@@ -1,81 +1,135 @@
-import { FuseBox, FuseBoxOptions, Sparky, UglifyESPlugin, SassPlugin, CSSPlugin, PostCSSPlugin, VueComponentPlugin } from "fuse-box";
-// import TsTransformClasscat from "ts-transform-classcat";
-// import TsTransformInferno from "ts-transform-inferno";
-let fuseTest: FuseBox;
-let fuseClient: FuseBox;
-let fuseServer: FuseBox;
-const fuseOptions: FuseBoxOptions = {
-   homeDir: "js",
-   output: "bundles/$name.js",
-   cache: true,
-   sourceMaps: { inline: false, vendor: false },
-   // transformers: {
-   //    before: [TsTransformClasscat(), TsTransformInferno()]
-   // },
-   plugins: [
-   //    UglifyESPlugin({
-   //       mangle: {
-   //         toplevel: true,
-   //         screw_ie8: true,
-   //       },
-   //     }),
-     ],
-};
-const fuseClientOptions: FuseBoxOptions = {
-   ...fuseOptions,
-   plugins: [
-	  // Setup client-side plugins here
-      // CSSPlugin()
-   //    UglifyESPlugin({
-   //       mangle: {
-   //         toplevel: true,
-   //         screw_ie8: true,
-   //       },
-   //     }),
-      VueComponentPlugin(),
-      SassPlugin({
-         includePaths: [
-            "node_modules/bourbon/core"
-         ]
-        }),
-      PostCSSPlugin(),
-      CSSPlugin()
-   ],
-};
-const fuseServerOptions: FuseBoxOptions = {
-   ...fuseOptions
-};
+import * as path from 'path';
+
+import { fusebox, pluginCSS, pluginSass, sparky } from 'fuse-box';
+
+class Context {
+  //  isProduction;
+  //  runServer;
+   getConfig = () =>
+     fusebox({
+       //compilerOptions: { tsConfig: 'sdfsd.json' },
+       cache: { enabled: false, root: './.cache', strategy: 'fs' },
+       compilerOptions: { jsParser: { nodeModules: 'ts' } },
+      //  devServer: this.runServer,
+       entry: 'ts/client/index.ts',
+ 
+       sourceMap: { project: true, vendor: false },
+       target: 'browser',
+       //threading: { minFileSize: 2000, threadAmount: 3 },
+       watcher: true,
+      //  webIndex: {
+      //    publicPath: '/',
+      //    template: 'src/index.html',
+      //  },
+ 
+      //  plugins: [
+      //    pluginAngular('*.component.ts'),
+      //    pluginSass('*.component.scss', { asText: true, useDefault: false }),
+      //    pluginCSS('app*.css', { asText: true }),
+      //  ],
+     });
+ }
+ const { exec, rm, task } = sparky<Context>(Context);
+ 
+ task('default', async ctx => {
+   rm('./dist');
+   const fuse = ctx.getConfig();
+ 
+   await fuse.runDev({
+     bundles: {
+       distRoot: path.join(__dirname, 'dist'),
+       app: 'app.js',
+     },
+   });
+ });
+ 
+ task('preview', async ctx => {
+   rm('./dist');
+   const fuse = ctx.getConfig();
+   await fuse.runProd({ uglify: true, buildTarget: 'ES5' });
+ });
+ task('dist', async ctx => {
+   const fuse = ctx.getConfig();
+   await fuse.runProd({ uglify: true });
+ });
 
 
-// Sparky.task("clean", () => {
-//    Sparky.src("js")
-//       .clean("js")
-//       .exec();
-// });
-Sparky.task("test", ["&clean", "&config"], () => {
-   fuseTest = FuseBox.init(fuseOptions);
-   fuseTest.bundle("client/bundle").test("[**/**.test.tsx]", null);
-});
-Sparky.task("client", () => {
-   fuseClient = FuseBox.init(fuseClientOptions);
-   fuseClient
-      .bundle("client")
-      .target("browser@es2015")
-      // .watch("client/**")
-      // .hmr()
-      .instructions("> client/index.ts");
-   fuseClient.run();
-});
-Sparky.task("server", () => {
-   fuseServer = FuseBox.init(fuseServerOptions);
-   fuseServer
-      .bundle("server")
-      .target("server@esnext")
-      .instructions("> server/index.tsx");
-   fuseServer.run();
-});
-// Sparky.task("dev", ["clean", "config", "client"], () => {
-//    fuse = FuseBox.init(fuseOptions);
-//    fuse.run();
-// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
