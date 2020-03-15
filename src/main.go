@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	graphql "github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
-	"github.com/l4nn1312/santacruzbiga/v2/src/santacruzbiga"
 )
 
 var schema *graphql.Schema
