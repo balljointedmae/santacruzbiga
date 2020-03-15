@@ -14,18 +14,10 @@
     "@types/koa": "^2.11.2",
     "axios": "^0.19.2",
     "fuse-box": "^3.7.1",
-    "inferno": "^7.4.2",
-    "inferno-redux": "^7.4.2",
-    "inferno-router": "^7.4.2",
-    "inferno-server": "^7.4.2",
     "koa": "^2.11.0",
     "ramda": "^0.27.0",
-    "redux": "^4.0.5",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^6.5.4",
-    "ts-transform-classcat": "^0.1.1",
-    "ts-transform-inferno": "^4.0.2",
     "uglify-es": "^3.3.9"
   },
   "devDependencies": {
@@ -38,11 +30,17 @@
     "eslint-plugin-import": "^2.20.1",
     "iotacss": "^1.6.0",
     "node-sass": "^4.13.1",
+    "postcss": "^7.0.27",
+    "postcss-selector-parser": "^6.0.2",
     "prettier": "^1.19.1",
     "supertest": "^4.0.2",
     "ts-node": "^8.6.2",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "^3.7.4"
+    "typescript": "^3.7.4",
+    "vue": "^2.6.11",
+    "vue-hot-reload-api": "^2.3.4",
+    "vue-template-compiler": "^2.6.11",
+    "vue-template-es2015-compiler": "^1.9.1"
   },
   "jest": {
     "moduleFileExtensions": [

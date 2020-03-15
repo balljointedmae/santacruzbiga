@@ -1,17 +1,17 @@
-import { FuseBox, FuseBoxOptions, Sparky, UglifyESPlugin, SassPlugin, CSSPlugin } from "fuse-box";
-import TsTransformClasscat from "ts-transform-classcat";
-import TsTransformInferno from "ts-transform-inferno";
+import { FuseBox, FuseBoxOptions, Sparky, UglifyESPlugin, SassPlugin, CSSPlugin, PostCSSPlugin, VueComponentPlugin } from "fuse-box";
+// import TsTransformClasscat from "ts-transform-classcat";
+// import TsTransformInferno from "ts-transform-inferno";
 let fuseTest: FuseBox;
 let fuseClient: FuseBox;
 let fuseServer: FuseBox;
 const fuseOptions: FuseBoxOptions = {
-   homeDir: "ts",
-   output: "js/$name.js",
+   homeDir: "js",
+   output: "bundles/$name.js",
    cache: true,
    sourceMaps: { inline: false, vendor: false },
-   transformers: {
-      before: [TsTransformClasscat(), TsTransformInferno()]
-   },
+   // transformers: {
+   //    before: [TsTransformClasscat(), TsTransformInferno()]
+   // },
    plugins: [
    //    UglifyESPlugin({
    //       mangle: {
@@ -26,11 +26,19 @@ const fuseClientOptions: FuseBoxOptions = {
    plugins: [
 	  // Setup client-side plugins here
       // CSSPlugin()
+   //    UglifyESPlugin({
+   //       mangle: {
+   //         toplevel: true,
+   //         screw_ie8: true,
+   //       },
+   //     }),
+      VueComponentPlugin(),
       SassPlugin({
          includePaths: [
             "node_modules/bourbon/core"
          ]
         }),
+      PostCSSPlugin(),
       CSSPlugin()
    ],
 };
@@ -55,7 +63,7 @@ Sparky.task("client", () => {
       .target("browser@es2015")
       // .watch("client/**")
       // .hmr()
-      .instructions("> client/index.tsx");
+      .instructions("> client/index.ts");
    fuseClient.run();
 });
 Sparky.task("server", () => {
