@@ -11,7 +11,7 @@
   "dependencies": {
     "class-transformer": "^0.2.3",
     "class-validator": "^0.11.0",
-    "fastify": "^2.12.1",
+    "fastify": "^2.15.1",
     "history": "^4.10.1",
     "inferno": "^7.4.2",
     "inferno-router": "^7.4.2",
